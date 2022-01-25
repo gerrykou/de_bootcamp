@@ -144,3 +144,5 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 notes.txt
+/data
+/ny_taxi_postgres_data
