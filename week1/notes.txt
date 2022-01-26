@@ -1,0 +1,122 @@
+ docker run -it \
+  -e POSTGRES_USER="root" \
+  -e POSTGRES_PASSWORD="root" \
+  -e POSTGRES_DB="ny_taxi" \
+  -v $(pwd)/ny_taxi_postgres_data:/var/lib/postgresql/data \
+  -p 5432:5432 postgres:13
+
+
+ docker run -it \
+  -e PGADMIN_DEFAULT_EMAIL="admin@admin.com" \
+  -e PGADMIN_DEFAULT_PASSWORD="root" \
+  -p 8080:80 \
+  dpage/pgadmin4
+
+ docker network create pg-network
+
+ #network
+
+  docker run -it \
+  -e POSTGRES_USER="root" \
+  -e POSTGRES_PASSWORD="root" \
+  -e POSTGRES_DB="ny_taxi" \
+  -v $(pwd)/ny_taxi_postgres_data:/var/lib/postgresql/data \
+  --network=pg-network \
+  --name pg-database \
+  -p 5432:5432 postgres
+
+
+ docker run -it \
+  -e PGADMIN_DEFAULT_EMAIL="admin@admin.com" \
+  -e PGADMIN_DEFAULT_PASSWORD="root" \
+  -p 8080:80 \
+  --network=pg-network \
+  --name pg-admin \
+  dpage/pgadmin4
+
+export URL="https://s3.amazonaws.com/nyc-tlc/trip+data/yellow_tripdata_2021-01.csv"
+
+ python3 ingest_data.py \
+  --user=root \
+  --password=root \
+  --host=localhost \
+  --port=5432 \
+  --db=ny_taxi \
+  --table_name=yellow_taxi_trips \
+  --url=${URL}
+
+
+
+##SQL
+
+3. Count records, trips that started on January 15.
+
+SELECT COUNT(*) FROM "yellow_taxi_trips" WHERE date(tpep_pickup_datetime) = '2021-01-15';  53024
+
+4. Largest tip for each day On which day it was the largest tip in January? 
+
+tip_amount , Use the pick up time for your calculations.
+SELECT max(tip_amount),date(tpep_pickup_datetime) AS dt FROM "yellow_taxi_trips" GROUP BY dt order by dt
+
+SELECT max(tip_amount) AS mxt, date(tpep_pickup_datetime) AS "dt" FROM "yellow_taxi_trips" GROUP BY dt order by mxt DESC
+1140.44 | 2021-01-20 
+
+5. Most popular destination
+
+passenger_count
+
+SELECT COUNT(*) FROM "yellow_taxi_trips" WHERE date(tpep_pickup_datetime) = '2021-01-15'; 
+
+---NOTES---
+passenger_count | trip_distance | RatecodeID | store_and_fwd_flag |PULocationID | DOLocationID | payment_type | fare_amount| extra | mta_tax | tip_amount | tolls_amount | improvement_surcharge | total_amount | congestion_surcharge |
+
+SELECT max(tip_amount),date(tpep_pickup_datetime) AS dt FROM "yellow_taxi_trips" GROUP BY dt order by 
+                        dt  LIMIT 100
+
+SELECT max(tip_amount),date(tpep_pickup_datetime) AS dt FROM "yellow_taxi_trips" WHERE dt between '2021-01-01' and '2021-01-31'
+                        dt
+
+
+SELECT
+  tpep_pickup_datetime,
+  tpep_dropoff_datetime,
+  total_amount,
+  CONCAT(zpu."Borough", ' / ', zpu."Zone") As "pickup_loc",
+  CONCAT(zdo."Borough", ' / ' , zpu."Zone") As "dropoff_loc"
+FROM
+  yellow_taxi_trips t JOIN zones zpu
+  	ON t."PULocationID" = zpu."LocationID"
+  	-- now we have one table
+  	-- which we will join with another table
+  JOIN zones zdo
+  	ON t."DOLocationID" = zdo."LocationID"
+  LIMIT 100;
+  
+  
+  select
+  DOLocationID,
+  count(*) 
+  from
+  yellow_taxi_trips t
+  GROUP BY "PULocationID"
+  LIMIT 10;
+ 
+ select
+ t.tpep_pickup_datetime,
+ t.tpep_dropoff_datetime,
+ zpu."LocationID",
+ zpu."Borough"
+ from 
+ yellow_taxi_trips t JOIN zones zpu
+   ON t."DOLocationID" = zpu."LocationID"
+limit 10;
+  
+   5. Most popular destination
+
+What was the most popular destination for passengers picked up in central park on January 14?
+
+Use the pick up time for your calculations.
+
+Enter the zone name (not id). If the zone name is unknown (missing), write "Unknown"
+
+select * from yellow_taxi_trips limit 10;
