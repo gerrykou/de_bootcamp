@@ -119,4 +119,51 @@ Use the pick up time for your calculations.
 
 Enter the zone name (not id). If the zone name is unknown (missing), write "Unknown"
 
+SELECT
+ --tpep_pickup_datetime,
+ --tpep_dropoff_datetime,
+  COUNT(total_amount),
+  zpu."Zone" As "pickup_loc",
+  zdo."Zone" As "dropoff_loc"
+FROM
+  yellow_taxi_trips t JOIN zones zpu
+  	ON t."PULocationID" = zpu."LocationID"
+  	-- now we have one table
+  	-- which we will join with another table
+  JOIN zones zdo
+  	ON t."DOLocationID" = zdo."LocationID"
+
+	WHERE date(tpep_pickup_datetime) = '2021-01-14' AND  zpu."Zone" = 'Central Park'
+	GROUP BY "pickup_loc","dropoff_loc"
+	ORDER BY count DESC
+
+Manhattan / Central Park
+
+Question 6: Most expensive route *
+What's the pickup-dropoff pair with the largest average price for a ride 
+(calculated based on total_amount)? Enter two zone names separated by a slashFor example:
+"Jamaica Bay / Clinton East"If any of the zone names are unknown (missing), write "Unknown". For example, "Unknown / Clinton East".
+
+SELECT
+ --tpep_pickup_datetime,
+ --tpep_dropoff_datetime,
+  COUNT(total_amount),
+  zpu."Zone" As "pickup_loc",
+  zdo."Zone" As "dropoff_loc"
+FROM
+  yellow_taxi_trips t JOIN zones zpu
+  	ON t."PULocationID" = zpu."LocationID"
+  	-- now we have one table
+  	-- which we will join with another table
+  JOIN zones zdo
+  	ON t."DOLocationID" = zdo."LocationID"
+
+	WHERE date(tpep_pickup_datetime) = '2021-01-14' AND  zpu."Zone" = 'Central Park'
+	GROUP BY "pickup_loc","dropoff_loc"
+	ORDER BY count DESC
+
+Alphabet City/Unknown
+
+
+
 select * from yellow_taxi_trips limit 10;
