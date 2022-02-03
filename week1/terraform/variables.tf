@@ -3,7 +3,7 @@ locals {
 }
 
 variable "project" {
-  description = "Your GCP Project ID"
+  description = "de-bootcamp-339509"
 }
 
 variable "region" {
