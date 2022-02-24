@@ -29,7 +29,7 @@ Q5
 df2.groupBy('dispatching_base_num').count().orderBy('count', ascending = False).show()   
 +--------------------+-------+
 |dispatching_base_num|  count|
-+--------------------+-------+
++--------------------+-------+   
 |              B02510|3233664|
 
 
