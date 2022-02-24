@@ -186,3 +186,6 @@ terraform.rc
 
 .terraform
 .terraform.lock.hcl
+
+week5/data/
+week5/zones/
