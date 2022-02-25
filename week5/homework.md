@@ -30,7 +30,17 @@ df2.groupBy('dispatching_base_num').count().orderBy('count', ascending = False).
 +--------------------+-------+
 |dispatching_base_num|  count|
 +--------------------+-------+   
-|              B02510|3233664|
+|              B02510|3233664|   
+3 stages 230 tasks   
+
+Q6   
+BroadcastNestedLoopJoin   
+1 stage   
++-------------------+---------------------------------------------+------+   
+|puZone             |doZone                                       |cnt   |   
++-------------------+---------------------------------------------+------+   
+|East New York      |Governor's Island/Ellis Island/Liberty Island|135123|   
+
 
 
 

@@ -3,3 +3,6 @@ export PATH="${SPARK_HOME}/bin:${PATH}"
 
 export JAVA_HOME="${HOME}/bin/jdk-11.0.2"
 export PATH="${JAVA_HOME}/bin:${PATH}"
+
+export PYTHONPATH="${SPARK_HOME}/python/:$PYTHONPATH"
+export PYTHONPATH="${SPARK_HOME}/python/lib/py4j-0.10.9-src.zip:$PYTHONPATH"
