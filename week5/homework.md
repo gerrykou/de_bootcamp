@@ -41,6 +41,34 @@ BroadcastNestedLoopJoin
 +-------------------+---------------------------------------------+------+   
 |East New York      |Governor's Island/Ellis Island/Liberty Island|135123|   
 
+df.groupBy('PULocationID', 'DOLocationID').count().orderBy('count', ascending = False).show()     
+df.registerTempTable('notjoin')   
+
+spark.sql("""
+SELECT 
+concat(PULocationID, '/',DOLocationID) AS conc,
+count(*) AS cnt
+FROM notjoin
+GROUP BY  conc
+ORDER BY cnt DESC
+""").show()  
+
++-------+-----+
+|   conc|  cnt|
++-------+-----+
+|  76/76|45041|
+   
+spark.sql("""
+SELECT 
+*
+FROM zones
+WHERE LocationID=76
+""").show()  
+   
++----------+--------+-------------+------------+   
+|LocationID| Borough|         Zone|service_zone|   
++----------+--------+-------------+------------+   
+|        76|Brooklyn|East New York|   Boro Zone|
 
 
 
